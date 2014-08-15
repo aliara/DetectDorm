@@ -34,6 +34,7 @@ void releaseCornerKernels() {
   delete rightCornerKernel;
 }
 
+// TODO implement these
 cv::Mat eyeCornerMap(const cv::Mat &region, bool left, bool left2) {
   cv::Mat cornerMap;
 
