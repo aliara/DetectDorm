@@ -13,6 +13,7 @@
 
 // Pre-declarations
 cv::Mat floodKillEdges(cv::Mat &mat);
+void calculos(std::string, cv::Mat);
 
 
 /*
@@ -127,19 +128,21 @@ cv::Point findEyeCenter(cv::Mat face, cv::Rect eye, std::string debugWindow)
 	cv::Mat gradientY;
 	if(sobel)
 	{
-		cv::Sobel( eyeROI, gradientX, ddepth, 1, 0, 3, scale, delta, cv::BORDER_DEFAULT );
-		cv::Sobel( (eyeROI.t()).t(), gradientY, ddepth, 0, 1, 3, scale, delta, cv::BORDER_DEFAULT );
+		cv::Sobel( eyeROIUnscaled, gradientX, ddepth, 1, 0, 3, scale, delta, cv::BORDER_DEFAULT );
+//		cv::Sobel( (eyeROI.t()).t(), gradientY, ddepth, 0, 1, 3, scale, delta, cv::BORDER_DEFAULT );
+		cv::Sobel (eyeROIUnscaled, gradientY, ddepth, 0, 1, 3, scale, delta, cv::BORDER_DEFAULT );
 	}
 	if(maxgradient)
 	{
 		gradientX = computeMatXGradient(eyeROI);
 		gradientY = computeMatXGradient(eyeROI.t()).t();
 	}
+	calculos("Gradient Y",gradientY);
 	cv::Mat abs_grad_x, abs_grad_y;
 
 	cv::convertScaleAbs( gradientX, abs_grad_x );
 	cv::convertScaleAbs( gradientY, abs_grad_y );
-
+	calculos("Valor absoluto Gradient Y",abs_grad_y);
 	//	cv::Mat gradientY = computeMatXGradient(eyeROI);
 	//-- Normalize and threshold the gradient
 	// compute all the magnitudes
@@ -152,7 +155,7 @@ cv::Point findEyeCenter(cv::Mat face, cv::Rect eye, std::string debugWindow)
 	{
 		addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, mags );
 	}
-
+	calculos("Sobel",mags);
 	//compute the threshold
 	double gradientThresh = computeDynamicThreshold(mags, kGradientThreshold);
 	//double gradientThresh = kGradientThreshold;
@@ -272,10 +275,16 @@ cv::Point findEyeCenter(cv::Mat face, cv::Rect eye, std::string debugWindow)
 	cv::circle(eyeROI, maxP, 3,cv::Scalar(0,0,255));
 	if(debugL1 && (debugWindow == costado))
 	{
+		calculos("EyeROI", eyeROI);
 		std::string eyeROI_window = debugWindow;
 		cv::namedWindow(eyeROI_window,CV_WINDOW_NORMAL);
 		cv::moveWindow(eyeROI_window, 640, 350);
 		imshow(eyeROI_window,eyeROI);
+		int c = cv::waitKey(10);
+		if( (char)c == 'g' )
+		{
+			imwrite("ojo.png",eyeROIUnscaled);
+		}
 	}
 	return unscalePoint(maxP,eye);
 }

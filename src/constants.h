@@ -29,7 +29,7 @@ const float kPostProcessThreshold = 0.97;
 const bool kEnableEyeCorner = false;
 
 //Config
-const bool GBStatus = true;
+const bool GBStatus = false;
 
 const char hola = 0;
 
@@ -50,7 +50,7 @@ const char costado[] = "Left Eye";
 
 //Sobel
 const bool sobel=false;
-const int scale = -1;
+const int scale = 1;
 const int delta = 0;
 const int ddepth = CV_8U;
 

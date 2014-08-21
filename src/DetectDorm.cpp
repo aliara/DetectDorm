@@ -6,7 +6,7 @@
 #include <queue>
 #include <stdio.h>
 #include <math.h>
-#include <windows.h>
+//#include <windows.h>
 
 #include "constants.h"
 #include "findEyeCenter.h"
@@ -23,7 +23,6 @@ uint8_t detectAndDisplay( cv::Mat frame );
 int RS232_OpenComport(int, int);
 int RS232_SendByte(int, unsigned char);
 void RS232_CloseComport(int);
-int promedio (cv::Mat);
 void variarLuz(int);
 int CargarConf();
 
@@ -79,7 +78,8 @@ int main( int argc, const char** argv )
 			// Clasificar la imagen
 			if( !frame.empty() )
 			{
-				std::cout<<(int)detectAndDisplay( frame )<<"	"<<contHist<<std::endl;
+//				std::cout<<(int)detectAndDisplay( frame )<<"	"<<contHist<<std::endl;
+				detectAndDisplay( frame );
 				if(debugL0)
 				{
 					imshow(main_window_name,debugImage);
